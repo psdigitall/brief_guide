@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brief Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4A90E2;
+      --secondary-color: #50E3C2;
+      --error-color: #FF6B6B;
+      --success-color: #4CAF50;
+      --warning-color: #FFA500;
+      --background-color: #F5F7FA;
+      --text-color: #333;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    header {
+      background: white;
+      color: black;
+      text-align: center;
+      padding: 2em;
+      top: 0;
+      z-index: 1000;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .remove-section {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: #888;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .input-container {
+      position: relative;
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .progress {
+      width: 0;
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 5px;
+      transition: width 0.3s ease;
+    }
+
+    .header-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .header-info .input-container {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .brief-content {
+      display: flex;
+    }
+
+    .brief-form {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    .brief-preview {
+      flex: 1;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .input-container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .input-container:hover {
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    }
+
+    .input-container label {
+      display: block;
+      margin-bottom: 0.5em;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .input-container input, .input-container textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-container input:focus, .input-container textarea:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    .feedback {
+      display: none; /* Skryté na začiatku, zobrazí sa po vyplnení */
+      margin-top: 0.5em;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+    }
+    .input-container .feedback {
+      margin-top: 0.5em;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+    }
+
+    .input-container.correct input, .input-container.correct textarea {
+      border-color: var(--success-color);
+      background-color: #e6ffed;
+    }
+
+    .input-container.correct .feedback {
+      color: var(--success-color);
+    }
+
+    .input-container.warning input, .input-container.warning textarea {
+      border-color: var(--warning-color);
+      background-color: #fff9e6;
+    }
+
+    .input-container.warning .feedback {
+      color: var(--warning-color);
+    }
+
+    .input-container.error input, .input-container.error textarea {
+      border-color: var(--error-color);
+      background-color: #ffe6e6;
+    }
+
+    .input-container.error .feedback {
+      color: var(--error-color);
+    }
+
+    /* Modal CSS */
+    .modal {
+      display: none; 
+      position: fixed; 
+      z-index: 1000; 
+      left: 0;
+      top: 0;
+      width: 100%; 
+      height: 100%; 
+      overflow: auto; 
+      background-color: rgb(0,0,0); 
+      background-color: rgba(0,0,0,0.4); 
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto; 
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%; 
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .modal-content button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #singleSectionBtn {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    #allSectionsBtn {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+
+        .button-container {
+          text-align: center;
+          margin-top: 20px;
+        }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #3A80D2;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .input-actions {
+      display: flex;
+      align-items: center;
+      margin-top: 0.5em;
+    }
+
+    .json-example {
+      background-color: #f0f0f0;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      position: relative;
+    }
+    
+    .json-example button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+    }
+
+    .pdf-upload-icon {
+      display: inline-block;
+      cursor: pointer;
+      margin-left: 10px;
+      font-size: 1.5em;
+      color: var(--primary-color);
+      transition: color 0.3s ease;
+    }
+
+    .pdf-upload-icon:hover {
+      color: #3A80D2;
+    }
+
+    .pdf-upload-icon img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+
+    .pdf-upload-input {
+      display: none;
+    }
+
+
+    .loading-icon {
+      display: none;
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-icon {
+      animation: spin 1s linear infinite;
+    }
+
+    @media (max-width: 768px) {
+      .header-info, .brief-content, .form-grid {
+        flex-direction: column;
+        grid-template-columns: 1fr;
+      }
+
+      .header-info .input-container, .brief-form, .brief-preview {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+    }
+
+    .small-text {
+      font-size: 0.7em;
+      color: black;
+      font-weight: normal;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/6.1.1/docx.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Brief Guide</h1>
+  </header>
+  <main>
+    <form id="briefForm">
+      <div class="header-info">
+        <div class="input-container">
+          <label for="client">Client</label>
+          <input type="text" id="client" name="client">
+          <div class="feedback"></div>
+        </div>
+        <div class="input-container">
+          <label for="product">Product <span class="small-text">(popis produktu)</span></label>
+          <input type="text" id="product" name="product">
+          <div class="feedback"></div>
+        </div>
+        <div class="input-container">
+          <label for="job">Job <span class="small-text">(popis úlohy v pár slovách)</span></label>
+          <input type="text" id="job" name="job">
+          <div class="feedback"></div>
+        </div>
+        <div class="input-container">
+          <label for="team">Team <span class="small-text">(kto bude pracovať)</span></label>
+          <input type="text" id="team" name="team">
+          <div class="feedback"></div>
+        </div>
+        <div class="input-container">
+          <label for="deadline">Deadline</label>
+          <input type="date" id="deadline" name="deadline">
+          <div class="feedback"></div>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+      <div class="brief-content">
+        <div class="brief-form form-grid">
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('task')">✖</button>
+            <label for="task">ZADANIE (čo ideme robiť)</label>
+            <textarea id="task" name="task" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('task', event)">Príklad</a>
+            <div id="taskExamples" class="examples" style="display:none;">
+              <p>1: Realizovať aktivačnú kreatívnu kampaň na TV kanáloch, sociálnych sieťach a internete na podporu letnej kampane.</p>
+              <p>2: Vytvoriť kreatívny návrh aktivačnej kampane na TV kanáloch, sociálnych sieťach a internete.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('task')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="taskPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'task')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('background')">✖</button>
+            <label for="background">BACKGROUND (čo o tom vieme)</label>
+            <textarea id="background" name="background" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('background', event)">Príklad</a>
+            <div id="backgroundExamples" class="examples" style="display:none;">
+              <p>Aktivačnou kreatívnou kampaňou chceme budovať povedomie, že s UPC môžu všetci naši zákazníci počas leta sledovať najvýznamnejšie športové udalosti roku 2024. S UPC im neutečie ani sekunda z kľúčových športových podujatí.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('background')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="backgroundPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'background')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('insight')">✖</button>
+            <label for="insight">INSIGHT (čo je za tým)</label>
+            <textarea id="insight" name="insight" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('insight', event)">Príklad</a>
+            <div id="insightExamples" class="examples" style="display:none;">
+              <p>Trh je počas leta presýtený komunikáciou značiek prepojenou na športové udalosti. Je dôležité klásť dôraz na kreatívne riešenie, ktoré ľudí osloví aj v tomto čase.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('insight')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="insightPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'insight')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('keyMessage')">✖</button>
+            <label for="keyMessage">KEY MESSAGE (čo tým chceme povedať)</label>
+            <textarea id="keyMessage" name="keyMessage" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('keyMessage', event)">Príklad</a>
+            <div id="keyMessageExamples" class="examples" style="display:none;">
+              <p>S UPC môžu všetci zákazníci počas leta sledovať najvýznamnejšie športové udalosti roku 2024. S UPC im neutečie ani sekunda z kľúčových športových podujatí.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('keyMessage')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="keyMessagePdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'keyMessage')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('goal')">✖</button>
+            <label for="goal">CIEĽ (brand awareness, získanie kontaktov)</label>
+            <textarea id="goal" name="goal" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('goal', event)">Príklad</a>
+            <div id="goalExamples" class="examples" style="display:none;">
+              <p>Zvýšiť povedomie o letnej komunikácii UPC – Športové leto s UPC. Cieľom je zvyšovať povedomie o tom, že zákazníci UPC môžu sledovať všetky kľúčové športové udalosti s akoukoľvek službou od UPC.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('goal')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="goalPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'goal')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('targetAudience')">✖</button>
+            <label for="targetAudience">CIEĽOVKA + TONE OF VOICE</label>
+            <textarea id="targetAudience" name="targetAudience" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('targetAudience', event)">Príklad</a>
+            <div id="targetAudienceExamples" class="examples" style="display:none;">
+              <p>Cieľovka: 18-35 rokov, muži a ženy, mestské zameranie, nie pivní nadšenci, otvorení novým chuťovým zážitkom. Tone of voice: slobodný, uvoľnený, energický, zábavný, spontánny.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('targetAudience')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="targetAudiencePdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'targetAudience')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('importantPoints')">✖</button>
+            <label for="importantPoints">DÔLEŽITÉ (čo tam nesmie chýbať)</label>
+            <textarea id="importantPoints" name="importantPoints" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('importantPoints', event)">Príklad</a>
+            <div id="importantPointsExamples" class="examples" style="display:none;">
+              <p>Musíme rešpektovať zásady komerčnej komunikácie, hlavne časť A - Základné zásady a prevencia odvolávania sa na neplnoletých.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('importantPoints')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="importantPointsPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'importantPoints')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('output')">✖</button>
+            <label for="output">VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA</label>
+            <textarea id="output" name="output" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('output', event)">Príklad</a>
+            <div id="outputExamples" class="examples" style="display:none;">
+              <p>Pripraviť kreatívny koncept kampane, ktorá bude fungovať na sociálnych médiách a digitálnych kanáloch. Zahrnúť formáty ako video, grafiky a textové príspevky.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('output')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="outputPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'output')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('timing')">✖</button>
+            <label for="timing">TIMING (aj interný, aj kampaňový)</label>
+            <textarea id="timing" name="timing" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('timing', event)">Príklad</a>
+            <div id="timingExamples" class="examples" style="display:none;">
+              <p>Realizácia aktivity počas leta (1.5. – 1.9. 2024), ideálne v júni/júli.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('timing')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="timingPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'timing')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('budget')">✖</button>
+            <label for="budget">BUDGET (suma + zadefinovanie)</label>
+            <textarea id="budget" name="budget" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('budget', event)">Príklad</a>
+            <div id="budgetExamples" class="examples" style="display:none;">
+              <p>Online produkcia + agency fee: 15,000 EUR, Influenceri + media: 35,000 EUR.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('budget')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="budgetPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'budget')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('supportingDocs')">✖</button>
+            <label for="supportingDocs">PODKLADY A PRÍLOHY</label>
+            <textarea id="supportingDocs" name="supportingDocs" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('supportingDocs', event)">Príklad</a>
+            <div id="supportingDocsExamples" class="examples" style="display:none;">
+              <p>Brand book, Policy of commercial communication, KV & Portfolio overview.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('supportingDocs')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="supportingDocsPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'supportingDocs')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="input-container">
+            <button type="button" class="remove-section" onclick="removeSection('previousComm')">✖</button>
+            <label for="previousComm">DOTERAJŠIA KOMUNIKÁCIA + KONKURENCIA</label>
+            <textarea id="previousComm" name="previousComm" rows="4"></textarea>
+            <a href="#" onclick="toggleExamples('previousComm', event)">Príklad</a>
+            <div id="previousCommExamples" class="examples" style="display:none;">
+              <p>Nové offline verzie TV spotov sú nahraté na sharepointe.</p>
+            </div>
+            <div class="input-actions">
+              <button type="button" onclick="checkSection('previousComm')">Check</button>
+              <label class="pdf-upload-icon">
+                <img src="https://www.svgrepo.com/show/28557/upload-sign.svg" alt="Upload PDF">
+                <input type="file" id="previousCommPdfUpload" class="pdf-upload-input" accept="application/pdf" onchange="handlePdfUpload(event, 'previousComm')">
+              </label>
+              <img src="https://cdn.pixabay.com/animation/2022/07/29/03/42/03-42-05-37_512.gif" alt="Loading" class="loading-icon" id="loadingIcon">
+            </div>
+            <div class="feedback"></div>
+          </div>
+          
+        </div>
+        <div class="brief-preview" id="briefPreview">
+          <h2>Brief Preview</h2>
+          <!-- Preview content will be dynamically inserted here -->
+        </div>
+      </div>
+    </form>
+    <div class="button-container">
+      <button type="button" id="generateDocBtn">Generate Word Document</button>
+      <button type="button" id="addSectionBtn">+ Add Custom Section</button>
+    </div>
+
+<!-- Modal -->
+<div id="pdfUploadModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Chcete vygenerovať obsah iba pre túto sekciu alebo pre všetky detekované sekcie?</p>
+    <button id="singleSectionBtn">Iba pre túto sekciu</button>
+    <button id="allSectionsBtn">Pre všetky sekcie (teraz nefunkčné)</button>
+  </div>
+</div>
+
+  </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById("pdfUploadModal");
+  const span = document.getElementsByClassName("close")[0];
+  let currentSectionId = null;
+
+  function handlePdfUpload(event, sectionId) {
+    currentSectionId = sectionId;
+    const file = event.target.files[0];
+    if (file.type !== 'application/pdf') {
+      alert('Please upload a PDF file');
+      return;
+    }
+
+    modal.style.display = "block";
+
+    document.getElementById("singleSectionBtn").onclick = function() {
+      processPdf(file, true);
+      modal.style.display = "none";
+    };
+
+    document.getElementById("allSectionsBtn").onclick = function() {
+      processPdf(file, false);
+      modal.style.display = "none";
+    };
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  async function processPdf(file, singleSection) {
+    const loadingIcon = document.getElementById('loadingIcon');
+    loadingIcon.style.display = 'inline-block';
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const typedarray = new Uint8Array(e.target.result);
+
+      try {
+        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+        let fullText = '';
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(' ');
+          fullText += pageText + '\n';
+        }
+
+        if (singleSection) {
+          const prompt = `
+            You are an assistant that helps users create clear and effective briefs for their projects.
+            - Guide users through the process.
+            - Provide a concise and clear summary of the document.
+            Summarize the following PDF content into a brief description of the ${currentSectionId} section:
+            PDF Content: ${fullText}
+            Provide the summary in one to two sentences.
+          `;
+
+          const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+            model: "gpt-4o-mini-2024-07-18",
+            messages: [
+              { role: "system", content: "You are an assistant that helps users create clear and effective briefs for their projects." },
+              { role: "user", content: prompt }
+            ],
+            max_tokens: 15000,
+            temperature: 0.1,
+            top_p: 0.1,
+          }, {
+            headers: {
+              "Authorization": `Bearer ${apiKey}`,
+              "Content-Type": "application/json"
+            }
+          });
+
+          const summary = response.data.choices[0].message.content.trim();
+          document.getElementById(currentSectionId).value = summary;
+          updatePreview();
+        } else {
+          const prompt = `
+            You are an assistant that helps users create clear and effective briefs for their projects.
+            - Guide users through the process.
+            - Provide a concise and clear summary of the document.
+            Summarize the following PDF content into brief descriptions for all relevant sections:
+            PDF Content: ${fullText}
+            Provide the summaries in JSON format, mapping each section to its summary.
+          `;
+
+          const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+            model: "gpt-4o-mini-2024-07-18",
+            messages: [
+              { role: "system", content: "You are an assistant that helps users create clear and effective briefs for their projects." },
+              { role: "user", content: prompt }
+            ],
+            max_tokens: 15000,
+            temperature: 0.1,
+            top_p: 0.1,
+          }, {
+            headers: {
+              "Authorization": `Bearer ${apiKey}`,
+              "Content-Type": "application/json"
+            }
+          });
+
+          const summaries = JSON.parse(response.data.choices[0].message.content.trim());
+          for (const [key, value] of Object.entries(summaries)) {
+            const section = document.getElementById(key);
+            if (section) {
+              section.value = value;
+            }
+          }
+          updatePreview();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while processing the PDF. Please try again.');
+      } finally {
+        loadingIcon.style.display = 'none';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  window.handlePdfUpload = handlePdfUpload;
+});
+</script>
+
+  <script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.8.335/pdf.worker.min.js';
+
+const apiKey = "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";
+
+function updatePreview() {
+  const previewDiv = document.getElementById('briefPreview');
+  const formData = new FormData(document.getElementById('briefForm'));
+  const sectionTitles = {
+    client: "Klient",
+    product: "Produkt",
+    job: "Job",
+    team: "Tím",
+    deadline: "Deadline",
+    task: "ZADANIE (čo ideme robiť)",
+    background: "BACKGROUND (čo o tom vieme)",
+    insight: "INSIGHT (čo je za tým)",
+    keyMessage: "KEY MESSAGE (čo tým chceme povedať)",
+    goal: "CIEĽ (brand awareness, získanie kontaktov)",
+    targetAudience: "CIEĽOVKA + TONE OF VOICE",
+    importantPoints: "DÔLEŽITÉ (čo tam nesmie chýbať)",
+    output: "VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA",
+    timing: "TIMING (aj interný, aj kampaňový)",
+    budget: "BUDGET (suma + zadefinovanie)",
+    supportingDocs: "PODKLADY A PRÍLOHY",
+    previousComm: "DOTERAJŠIA KOMUNIKÁCIA + KONKURENCIA"
+  };
+
+  let previewContent = '<h2>Brief Preview</h2>';
+
+  for (let [key, value] of formData.entries()) {
+    if (value.trim() !== '') {
+      previewContent += `<h3>${sectionTitles[key]}:</h3><p contenteditable="true" data-field="${key}">${value}</p>`;
+    }
+  }
+
+  previewDiv.innerHTML = previewContent;
+
+  previewDiv.querySelectorAll('[contenteditable="true"]').forEach(element => {
+    element.addEventListener('input', function() {
+      const field = document.getElementById(this.dataset.field);
+      if (field) {
+        field.value = this.textContent;
+      }
+    });
+  });
+}
+
+async function checkSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  const feedbackDiv = section.parentElement.querySelector('.feedback');
+  const value = section.value.trim();
+
+  if (!value) {
+    feedbackDiv.textContent = "Toto pole je povinné.";
+    section.parentElement.classList.add('error');
+    section.parentElement.classList.remove('correct', 'warning');
+    feedbackDiv.style.display = 'block';
+    return;
+  }
+
+  feedbackDiv.textContent = "Kontrolujem...";
+  feedbackDiv.style.display = 'block';
+
+  const prompts = {
+    task: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "ZADANIE (čo ideme robiť)" section.
+    Do not include or suggest including goals, target audience, channels, timing, background, insight, key message, target audiences, important points, or output in the "ZADANIE (čo ideme robiť)" section.
+    Ensure feedback focuses solely on improving the task description clarity and specificity.
+
+    ### Evaluation Criteria:
+    If the user's input is good or okay, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Realizovať aktivačnú kreatívnu kampaň na TV kanáloch, sociálnych sieťach a internete na podporu letnej kampane."
+    "Vytvoriť kreatívny návrh aktivačnej kampane na TV kanáloch, sociálnych sieťach a internete."
+
+    Brief Section: ZADANIE (čo ideme robiť)
+    User Input: ${value}`,
+
+    background: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "background" section.
+    Do not include or suggest including the task description, goals, target audience, channels, timing, insight, key message, target audiences, important points, or output in the "background" section.
+    Ensure feedback focuses solely on providing relevant background information.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Aktivačnou kreatívnou kampaňou chceme budovať povedomie, že s UPC môžu všetci naši zákazníci počas leta sledovať najvýznamnejšie športové udalosti roku 2024. S UPC im neutečie ani sekunda z kľúčových športových podujatí."
+
+    Brief Section: BACKGROUND (čo o tom vieme)
+    User Input: ${value}`,
+
+    insight: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "insight" section.
+    Do not include or suggest including the task description, goals, target audience, channels, timing, background, key message, target audiences, important points, or output in the "INSIGHT" section.
+    Ensure feedback focuses solely on providing key insights that inform the project.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Trh je počas leta presýtený komunikáciou značiek prepojenou na športové udalosti. Je dôležité klásť dôraz na kreatívne riešenie, ktoré ľudí osloví aj v tomto čase."
+
+    Brief Section: INSIGHT (čo je za tým)
+    User Input: ${value}`,
+
+    keyMessage: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+    
+    ### Instruction:
+    Provide feedback specifically for the "key message" section.
+    Do not include or suggest including the task description, goals, target audience, channels, timing, background, insight, target audiences, important points, or output in the "key message" section.
+    Ensure feedback focuses solely on crafting a clear and impactful key message.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "S UPC môžu všetci zákazníci počas leta sledovať najvýznamnejšie športové udalosti roku 2024. S UPC im neutečie ani sekunda z kľúčových športových podujatí."
+
+    Brief Section: KEY MESSAGE (čo tým chceme povedať)
+    User Input: ${value}`,
+
+    goal: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+    
+    ### Instruction:
+    Provide feedback specifically for the "goal" section.
+    Do not include or suggest including the task description, target audience, channels, timing, background, insight, key message, target audiences, important points, or output in the "CIELE" section.
+    Ensure feedback focuses solely on clearly defining the goals and their measurability.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "VVaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Zvýšiť povedomie o letnej komunikácii UPC – Športové leto s UPC. Cieľom je zvyšovať povedomie o tom, že zákazníci UPC môžu sledovať všetky kľúčové športové udalosti s akoukoľvek službou od UPC."
+
+    Brief Section: CIEĽ (brand awareness, získanie kontaktov)
+    User Input: ${value}`,
+
+    targetAudience: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+    
+    ### Instruction:
+    Provide feedback specifically for the "target audiences" section.
+    Do not include or suggest including the task description, goals, channels, timing, background, insight, key message, important points, or output in the "CIEĽOVÁ SKUPINA" section.
+    Ensure feedback focuses solely on accurately describing the target audience and their characteristics.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Cieľovka: 18-35 rokov, muži a ženy, mestské zameranie, nie pivní nadšenci, otvorení novým chuťovým zážitkom. Tone of voice: slobodný, uvoľnený, energický, zábavný, spontánny."
+
+    Brief Section: CIEĽOVKA + TONE OF VOICE
+    User Input: ${value}`,
+
+    importantPoints: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+    
+    ### Instruction:
+    Provide feedback specifically for the "important points" section.
+    Do not include or suggest including the task description, goals, target audience, channels, timing, background, insight, key message, or output in the "important points" section.
+    Ensure feedback focuses solely on listing and clarifying important points for the project.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Musíme rešpektovať zásady komerčnej komunikácie, hlavne časť A - Základné zásady a prevencia odvolávania sa na neplnoletých."
+
+    Brief Section: DÔLEŽITÉ (čo tam nesmie chýbať)
+    User Input: ${value}`,
+
+    output: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA" section.
+    Do not include or suggest including the task description, goals, target audience, timing, background, insight, key message, target audiences, important points, or output in the "VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA" section.
+    Ensure feedback focuses solely on specifying the channels that will be used.
+
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+   IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Pripraviť kreatívny koncept kampane, ktorá bude fungovať na sociálnych médiách a digitálnych kanáloch. Zahrnúť formáty ako video, grafiky a textové príspevky."
+
+    Brief Section: VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA
+    User Input: ${value}`,
+
+    timing: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "ČASOVANIE" section.
+    Do not include or suggest including the task description, goals, target audience, channels, background, insight, key message, target audiences, important points, or output in the "ČASOVANIE" section.
+    Ensure feedback focuses solely on detailing the timing and schedule of the project.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Realizácia aktivity počas leta (1.5. – 1.9. 2024), ideálne v júni/júli."
+
+    Brief Section: TIMING (aj interný, aj kampaňový)
+    User Input: ${value}`,
+
+    budget: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "budget" section.
+    Do not include or suggest including the task description, goals, target audience, channels, background, insight, key message, target audiences, important points, or output in the "budget" section.
+    Ensure feedback focuses solely on detailing the budget of the project.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Online produkcia + agency fee: 15,000 EUR, Influenceri + media: 35,000 EUR."
+
+    Brief Section: BUDGET (suma + zadefinovanie)
+    User Input: ${value}`,
+
+    supportingDocs: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "supporting documents" section.
+    Do not include or suggest including the task description, goals, target audience, channels, background, insight, key message, target audiences, important points, or output in the "supporting documents" section.
+    Ensure feedback focuses solely on detailing the supporting documents of the project.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Brand book, Policy of commercial communication, KV & Portfolio overview."
+
+
+    Brief Section: PODKLADY A PRÍLOHY
+    User Input: ${value}`,
+
+    previousComm: `You are an assistant that helps users create clear and effective briefs for their projects.
+    1. Guide users through the process.
+    2. Provide constructive feedback.
+    3. Ensure each section is properly completed.
+    4. Correct grammar and formulations.
+    5. Write in Slovak language.
+
+    ### Instruction:
+    Provide feedback specifically for the "previous communication" section.
+    Do not include or suggest including the task description, goals, target audience, channels, background, insight, key message, target audiences, important points, or output in the "previous communication" section.
+    Ensure feedback focuses solely on detailing the previous communication of the project.
+
+    ### Evaluation Criteria:
+    If the user's input is good, reply with "Vyzerá to super". Output: "Vyzerá to super"
+    If the user's input is not that great, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Je to v poriadku, ale môžete byť jasnejší a konkrétnejší" and bullet points. nothing else. Do not show examples. Also, generate an example of how it should look correctly.
+    If the user's input is bad, explain why in one sentence and provide bullet points for improvement. Output: opening sentence = "Vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií" and bullet points. nothing else. Do not show examples.
+
+    IMPORTANT: Don't be too strict. More often the user is right, not you.
+
+    Good Example: 
+    "Nové offline verzie TV spotov sú nahraté na sharepointe."
+
+    Brief Section: DOTERAJŠIA KOMUNIKÁCIA + KONKURENCIA
+    User Input: ${value}`,
+  };
+
+  const prompt = prompts[sectionId];
+
+  try {
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: "gpt-4o-mini-2024-07-18",
+      messages: [
+        { role: "system", content: "You are an assistant that helps users create clear and effective briefs for their projects." },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: 15000,
+      temperature: 0.1,
+      top_p: 0.1,
+    }, {
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    const feedback = response.data.choices[0].message.content.trim();
+
+    feedbackDiv.innerHTML = "";
+    const feedbackParagraphs = feedback.split("\n");
+    feedbackParagraphs.forEach(paragraph => {
+      const feedbackItem = document.createElement("p");
+      feedbackItem.textContent = paragraph;
+      feedbackDiv.appendChild(feedbackItem);
+    });
+
+    if (feedback.toLowerCase().includes('vyzerá to super')) {
+      section.parentElement.classList.add('correct');
+      section.parentElement.classList.remove('error', 'warning');
+    } else if (feedback.toLowerCase().includes('je to v poriadku, ale môžete byť jasnejší a konkrétnejší')) {
+      section.parentElement.classList.add('warning');
+      section.parentElement.classList.remove('error', 'correct');
+    } else if (feedback.toLowerCase().includes('vaše zadanie je príliš stručné alebo neobsahuje dostatok informácií')) {
+      section.parentElement.classList.add('error');
+      section.parentElement.classList.remove('correct', 'warning');
+    }
+
+    feedbackDiv.style.display = 'block';
+
+  } catch (error) {
+    console.error('Error:', error);
+    feedbackDiv.textContent = "Pri kontrole došlo k chybe. Skúste to prosím znova.";
+    feedbackDiv.style.display = 'block';
+  }
+}
+
+async function generateJsonExample(sectionId, value) {
+  const prompt = `Generate a JSON example of an improved version of the following ${sectionId} content: "${value}"`;
+  
+  try {
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: "gpt-4o-mini-2024-07-18",
+      messages: [
+        { role: "system", content: "You are an assistant that generates JSON examples." },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: 15000,
+      temperature: 0.1,
+      top_p: 0.1,
+    }, {
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    return response.data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error('Error generating JSON example:', error);
+    return null;
+  }
+}
+
+  function displayImprovedExample(improvedExample, sectionId) {
+    const exampleDiv = document.createElement('div');
+    exampleDiv.className = 'improved-example';
+    exampleDiv.innerHTML = `
+      <p>Vaše zadanie je celkom správne, ale môže byť vylepšené. Skúste použiť viac formálny a kompletný jazyk, ako je to v príklade. Napríklad, môžete to formulovať takto:</p>
+      <textarea readonly>${improvedExample}</textarea>
+      <button onclick="insertImprovedExample('${sectionId}', \`${improvedExample}\`)">Copy</button>
+    `;
+    document.querySelector('.brief-preview').appendChild(exampleDiv);
+  }
+
+  function insertImprovedExample(sectionId, improvedExample) {
+    const section = document.getElementById(sectionId);
+    section.value = improvedExample;
+    updatePreview();
+  }
+
+
+function insertJsonExample(sectionId, jsonExample) {
+  const section = document.getElementById(sectionId);
+  const example = JSON.parse(jsonExample);
+  section.value = JSON.stringify(example[sectionId], null, 2); // Vložíme formátovaný JSON obsah
+  updatePreview();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById("pdfUploadModal");
+  const span = document.getElementsByClassName("close")[0];
+  let currentSectionId = null;
+
+  function handlePdfUpload(event, sectionId) {
+    currentSectionId = sectionId;
+    const file = event.target.files[0];
+    if (file.type !== 'application/pdf') {
+      alert('Please upload a PDF file');
+      return;
+    }
+
+    modal.style.display = "block";
+
+    document.getElementById("singleSectionBtn").onclick = function() {
+      processPdf(file, true);
+      modal.style.display = "none";
+    };
+
+    document.getElementById("allSectionsBtn").onclick = function() {
+      processPdf(file, false);
+      modal.style.display = "none";
+    };
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  async function processPdf(file, singleSection) {
+    const loadingIcon = document.getElementById('loadingIcon');
+    loadingIcon.style.display = 'inline-block';
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const typedarray = new Uint8Array(e.target.result);
+
+      try {
+        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+        let fullText = '';
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => item.str).join(' ');
+          fullText += pageText + '\n';
+        }
+
+        if (singleSection) {
+          await processSingleSection(fullText, currentSectionId);
+        } else {
+          const sectionIds = ["task", "background", "insight", "keyMessage", "goal", "targetAudience", "importantPoints", "output", "timing", "budget", "supportingDocs", "previousComm"];
+          const sectionPromises = sectionIds.map(id => processSingleSection(fullText, id));
+          await Promise.all(sectionPromises);
+        }
+        updatePreview();
+
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while processing the PDF. Please try again.');
+      } finally {
+        loadingIcon.style.display = 'none';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  async function processSingleSection(fullText, sectionId) {
+    const generatePrompts = {
+      task: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "ZADANIE (čo ideme robiť)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Realizovať aktivačnú kreatívnu kampaň na TV kanáloch, sociálnych sieťach a internete na podporu letnej kampane."
+        "Vytvoriť kreatívny návrh aktivačnej kampane na TV kanáloch, sociálnych sieťach a internete."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      background: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "BACKGROUND (čo o tom vieme)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Aktivačnou kreatívnou kampaňou chceme budovať povedomie, že s UPC môžu všetci naši zákazníci počas leta sledovať najvýznamnejšie športové udalosti roku 2024. S UPC im neutečie ani sekunda z kľúčových športových podujatí."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      insight: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "INSIGHT (čo je za tým)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Trh je počas leta presýtený komunikáciou značiek prepojenou na športové udalosti. Je dôležité klásť dôraz na kreatívne riešenie, ktoré ľudí osloví aj v tomto čase."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      keyMessage: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "KEY MESSAGE (čo tým chceme povedať)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "S UPC môžu všetci zákazníci počas leta sledovať najvýznamnejšie športové udalosti roku 2024. S UPC im neutečie ani sekunda z kľúčových športových podujatí."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      goal: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "CIEĽ (brand awareness, získanie kontaktov)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Zvýšiť povedomie o letnej komunikácii UPC – Športové leto s UPC. Cieľom je zvyšovať povedomie o tom, že zákazníci UPC môžu sledovať všetky kľúčové športové udalosti s akoukoľvek službou od UPC."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      targetAudience: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "CIEĽOVKA + TONE OF VOICE" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Cieľovka: 18-35 rokov, muži a ženy, mestské zameranie, nie pivní nadšenci, otvorení novým chuťovým zážitkom. Tone of voice: slobodný, uvoľnený, energický, zábavný, spontánny."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      importantPoints: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "DÔLEŽITÉ (čo tam nesmie chýbať)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Musíme rešpektovať zásady komerčnej komunikácie, hlavne časť A - Základné zásady a prevencia odvolávania sa na neplnoletých."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      output: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Pripraviť kreatívny koncept kampane, ktorá bude fungovať na sociálnych médiách a digitálnych kanáloch. Zahrnúť formáty ako video, grafiky a textové príspevky."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      timing: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "TIMING (aj interný, aj kampaňový)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Realizácia aktivity počas leta (1.5. – 1.9. 2024), ideálne v júni/júli."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      budget: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "BUDGET (suma + zadefinovanie)" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Online produkcia + agency fee: 15,000 EUR, Influenceri + media: 35,000 EUR."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      supportingDocs: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "PODKLADY A PRÍLOHY" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Brand book, Policy of commercial communication, KV & Portfolio overview."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+      previousComm: `
+        You are an assistant that helps users create clear and effective briefs for their projects.
+        - Guide users through the process.
+        - Provide constructive feedback.
+        - Ensure each section is properly completed.
+        - Correct grammar and formulations.
+        - Write in Slovak language.
+
+        Generate content specifically for the "DOTERAJŠIA KOMUNIKÁCIA + KONKURENCIA" section. 
+        Use examples to ensure clarity.
+
+        Good Example: 
+        "Nové offline verzie TV spotov sú nahraté na sharepointe."
+
+        PDF Content: ${fullText}
+        Provide the content in one to two sentences.
+      `,
+    };
+
+    const prompt = generatePrompts[sectionId];
+
+    try {
+      const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+        model: "gpt-4o-mini-2024-07-18",
+        messages: [
+          { role: "system", content: "You are an assistant that helps users create clear and effective briefs for their projects." },
+          { role: "user", content: prompt }
+        ],
+        max_tokens: 2000,
+        temperature: 0.2,
+        top_p: 0.1,
+      }, {
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      const summary = response.data.choices[0].message.content.trim();
+      document.getElementById(sectionId).value = summary;
+
+    } catch (error) {
+      console.error('Error processing section:', sectionId, error);
+    }
+  }
+
+  window.handlePdfUpload = handlePdfUpload;
+});
+
+document.getElementById('generateDocBtn').addEventListener('click', async function() {
+  const formData = new FormData(document.getElementById('briefForm'));
+  const sectionTitles = {
+    client: "Klient",
+    product: "Produkt",
+    job: "Job",
+    team: "Tím",
+    deadline: "Deadline",
+    task: "ZADANIE (čo ideme robiť)",
+    background: "BACKGROUND (čo o tom vieme)",
+    insight: "INSIGHT (čo je za tým)",
+    keyMessage: "KEY MESSAGE (čo tým chceme povedať)",
+    goal: "CIEĽ (brand awareness, získanie kontaktov)",
+    targetAudience: "CIEĽOVKA + TONE OF VOICE",
+    importantPoints: "DÔLEŽITÉ (čo tam nesmie chýbať)",
+    output: "VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA",
+    timing: "TIMING (aj interný, aj kampaňový)",
+    budget: "BUDGET (suma + zadefinovanie)",
+    supportingDocs: "PODKLADY A PRÍLOHY",
+    previousComm: "DOTERAJŠIA KOMUNIKÁCIA + KONKURENCIA"
+  };
+  let docContent = `
+    <html xmlns:w="urn:schemas-microsoft-com:office:word">
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; }
+          h2 { color: #4A90E2; }
+          p { margin: 0.5em 0; }
+          .logo-container { 
+            text-align: center;
+            margin-top: 50px;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Brief</h1>
+  `;
+  for (let [key, value] of formData.entries()) {
+    if (value.trim() !== '') {
+      docContent += `<h2>${sectionTitles[key]}:</h2><p>${value}</p>`;
+    }
+  }
+  const logoUrl = 'https://psdigital.sk/wp-content/uploads/2019/10/PS-Digital-Fullservisova-digitalna-agentura-logo-130.png';
+  docContent += `
+      <div class="logo-container">
+        <img src="${logoUrl}" alt="Company Logo">
+      </div>
+    </body>
+    </html>
+  `;
+  const blob = new Blob(['\ufeff', docContent], {
+    type: 'application/msword'
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'Brief.doc';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+document.getElementById('briefForm').addEventListener('input', updatePreview);
+
+// Initial preview update
+updatePreview();
+
+function toggleExamples(sectionId, event) {
+  event.preventDefault();
+  const examplesDiv = document.getElementById(sectionId + 'Examples');
+  if (examplesDiv.style.display === "none") {
+    examplesDiv.style.display = "block";
+  } else {
+    examplesDiv.style.display = "none";
+  }
+}
+
+function removeSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.parentElement.style.display = 'none';
+    section.value = ''; // Vymaže obsah sekcie
+    updatePreview(); // Aktualizuje náhľad
+  }
+}
+
+document.getElementById('generateDocBtn').addEventListener('click', async function() {
+  const formData = new FormData(document.getElementById('briefForm'));
+  const sectionTitles = {
+    client: "Klient",
+    product: "Produkt",
+    job: "Job",
+    team: "Tím",
+    deadline: "Deadline",
+    task: "ZADANIE (čo ideme robiť)",
+    background: "BACKGROUND (čo o tom vieme)",
+    insight: "INSIGHT (čo je za tým)",
+    keyMessage: "KEY MESSAGE (čo tým chceme povedať)",
+    goal: "CIEĽ (brand awareness, získanie kontaktov)",
+    targetAudience: "CIEĽOVKA + TONE OF VOICE",
+    importantPoints: "DÔLEŽITÉ (čo tam nesmie chýbať)",
+    output: "VÝSTUP / FORMÁTY / KANÁLY / ŠPECIFIKÁCIA",
+    timing: "TIMING (aj interný, aj kampaňový)",
+    budget: "BUDGET (suma + zadefinovanie)",
+    supportingDocs: "PODKLADY A PRÍLOHY",
+    previousComm: "DOTERAJŠIA KOMUNIKÁCIA + KONKURENCIA"
+  };
+  let docContent = `
+    <html xmlns:w="urn:schemas-microsoft-com:office:word">
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; }
+          h2 { color: #4A90E2; }
+          p { margin: 0.5em 0; }
+          .logo-container { 
+            text-align: center;
+            margin-top: 50px;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Brief</h1>
+  `;
+  for (let [key, value] of formData.entries()) {
+    if (value.trim() !== '') {
+      docContent += `<h2>${sectionTitles[key]}:</h2><p>${value}</p>`;
+    }
+  }
+  const logoUrl = 'https://psdigital.sk/wp-content/uploads/2019/10/PS-Digital-Fullservisova-digitalna-agentura-logo-130.png';
+  docContent += `
+      <div class="logo-container">
+        <img src="${logoUrl}" alt="Company Logo">
+      </div>
+    </body>
+    </html>
+  `;
+  const blob = new Blob(['\ufeff', docContent], {
+    type: 'application/msword'
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'Brief.doc';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+document.getElementById('briefForm').addEventListener('input', updatePreview);
+
+// Initial preview update
+updatePreview();
+
+function toggleExamples(sectionId, event) {
+  event.preventDefault();
+  const examplesDiv = document.getElementById(sectionId + 'Examples');
+  if (examplesDiv.style.display === "none") {
+    examplesDiv.style.display = "block";
+  } else {
+    examplesDiv.style.display = "none";
+  }
+}
+
+function removeSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    section.parentElement.style.display = 'none';
+    section.value = ''; // Vymaže obsah sekcie
+    updatePreview(); // Aktualizuje náhľad
+  }
+}
+</script>
+</body>
+</html>
